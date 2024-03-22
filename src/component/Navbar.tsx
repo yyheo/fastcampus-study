@@ -8,15 +8,17 @@ export default function Navbar() {
   return (
     <>
       <div className="navbar">
-        <div className="navbar__logo">nextmap</div>
+        <Link href="/" className="navbar__logo">
+          nextmap
+        </Link>
         <div className="navbar__list">
           <Link href="/stores" className="navbar__list--item">
             맛집 목록
           </Link>
-          <Link href="/sotres/new" className="navbar__list--item">
+          <Link href="/stores/new" className="navbar__list--item">
             맛집 등록
           </Link>
-          <Link href="/users/like" className="navbar__list--item">
+          <Link href="/users/likes" className="navbar__list--item">
             찜한 가게
           </Link>
           <Link href="/users/login" className="navbar__list--item">
@@ -39,10 +41,10 @@ export default function Navbar() {
             <Link href="/stores" className="navbar__list--item--mobile">
               맛집 목록
             </Link>
-            <Link href="/sotres/new" className="navbar__list--item--mobile">
+            <Link href="/stores/new" className="navbar__list--item--mobile">
               맛집 등록
             </Link>
-            <Link href="/users/like" className="navbar__list--item--mobile">
+            <Link href="/users/likes" className="navbar__list--item--mobile">
               찜한 가게
             </Link>
             <Link href="/users/login" className="navbar__list--item--mobile">
