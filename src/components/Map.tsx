@@ -3,15 +3,23 @@
 /*
 Kakao Map Docu
 https://apis.map.kakao.com/web/guide/
+마커 생성 Sample
+https://apis.map.kakao.com/web/sample/basicMarker/
+공공 데이터
+http://data.seoul.go.kr/dataList/OA-2741/S/1/datasetView.do
 */
 
 import Script from "next/script";
+import * as stores from "@/data/store_data.json";
 
 declare global {
   interface Window {
     kakao: any;
   }
 }
+
+const DEFAULT_LAT = 37.497625203; // 강남역 위도 경도
+const DEFAULT_LNG = 127.03088379;
 
 export default function Map() {
   const loadKakaoMap = () => {
@@ -23,11 +31,31 @@ export default function Map() {
     window.kakao.maps.load(function () {
       const mapContainer = document.getElementById("map");
       const mapOption = {
-        center: new window.kakao.maps.LatLng(33.450701, 126.570667), // 위도 경도 설정
+        center: new window.kakao.maps.LatLng(DEFAULT_LAT, DEFAULT_LNG), // 위도 경도 설정
         level: 3, // zoom level
       };
       // v3가 모두 로드된 후, 이 콜백 함수가 실행됩니다.
-      new window.kakao.maps.Map(mapContainer, mapOption);
+      const map = new window.kakao.maps.Map(mapContainer, mapOption);
+
+      // 식당 데이터 마커 띄우기
+      stores?.["DATA"]?.map((store) => {
+        // 마커가 표시될 위치입니다
+        var markerPosition = new window.kakao.maps.LatLng(
+          store?.y_dnts,
+          store?.x_cnts
+        );
+
+        // 마커를 생성합니다
+        var marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+
+        // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+        // marker.setMap(null);
+      });
     });
   };
   return (
