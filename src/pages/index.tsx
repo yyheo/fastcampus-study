@@ -31,3 +31,9 @@ export async function getStaticProps() {
     revalidate: 60 * 60,
   };
 }
+
+/*
+getStaticProps: 정적 페이지 생성을 위한 데이터를 가져오는 사전 렌더링 함수. 런타임이 아닌,
+빌드 (build)타임에서만 실행이 되므로, 변동이 거의 없는 데이터 대상으로만 적용하는게 좋음
+예를 들어 변동이 거의 없는 FAQ 글
+*/
