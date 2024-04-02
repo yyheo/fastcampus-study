@@ -37,3 +37,6 @@ next-env.d.ts
 
 # 강의자료
 **/강의자료
+
+# Mac
+.DS_Store
