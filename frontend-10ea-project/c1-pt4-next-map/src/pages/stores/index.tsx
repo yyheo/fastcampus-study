@@ -1,8 +1,26 @@
 import { StoreType } from "@/interface";
 import Image from "next/image";
 import axios from "axios";
+import { useQuery } from "react-query";
 
-export default function StoreListPage({ stores }: { stores: StoreType[] }) {
+export default function StoreListPage() {
+  const {
+    isLoading,
+    isError,
+    data: stores,
+  } = useQuery("stores", async () => {
+    const { data } = await axios("/api/stores");
+    return data as StoreType[];
+  });
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>다시 시도해주세요</span>;
+  }
+
   return (
     <div className="px-4 md:max-w-5xl mx-auto py-8">
       <ul role="list" className="divide-y divide-gray-100">
@@ -43,15 +61,15 @@ export default function StoreListPage({ stores }: { stores: StoreType[] }) {
   );
 }
 
-/*
-• getServerSideProps: 서버 사이드 렌더링을 위한 데이터 가져오기 함수.
-• 매 요청 마다 데이터를 서버에서 가져옴
-• 자주 업데이트 되는 posts 데이터들을 외부 API로부터 fetch 해서 사전 렌더링 하고 싶을 때 사용
-*/
+// /*
+// • getServerSideProps: 서버 사이드 렌더링을 위한 데이터 가져오기 함수.
+// • 매 요청 마다 데이터를 서버에서 가져옴
+// • 자주 업데이트 되는 posts 데이터들을 외부 API로부터 fetch 해서 사전 렌더링 하고 싶을 때 사용
+// */
 
-export async function getServerSideProps() {
-  const stores = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`);
-  return {
-    props: { stores: stores.data },
-  };
-}
+// export async function getServerSideProps() {
+//   const stores = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`);
+//   return {
+//     props: { stores: stores.data },
+//   };
+// }
