@@ -1,3 +1,4 @@
+import React, { useRef, useEffect } from "react";
 import { StoreApiResponse, StoreType } from "@/interface";
 import Image from "next/image";
 import axios from "axios";
@@ -6,11 +7,14 @@ import Loading from "@/components/Loading";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Pagination from "@/components/Pagination";
-import React from "react";
+import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 
 export default function StoreListPage() {
   const router = useRouter();
   const { page = "1" }: { page?: any } = router.query;
+  const ref = useRef<HTMLDivElement | null>(null);
+  const pageRef = useIntersectionObserver(ref, {});
+  const isPageEnd = !!pageRef?.isIntersecting;
 
   const fetchStores = async ({ pageParam = 1 }) => {
     const { data } = await axios("/api/stores?page=" + pageParam, {
@@ -34,6 +38,12 @@ export default function StoreListPage() {
     getNextPageParam: (lastPage: any) =>
       lastPage.data?.length > 0 ? lastPage.page + 1 : undefined,
   });
+
+  useEffect(() => {
+    if (isPageEnd) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, isPageEnd]);
 
   if (isError) {
     return (
@@ -91,6 +101,7 @@ export default function StoreListPage() {
       <button type="button" onClick={() => fetchNextPage()}>
         Next Page
       </button>
+      <div className="w-full touch-none h-10 mb-10 bg-red-600" ref={ref} />
     </div>
   );
 }
