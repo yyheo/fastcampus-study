@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { StoreApiResponse, StoreType } from "@/interface";
 import Image from "next/image";
 import axios from "axios";
@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Pagination from "@/components/Pagination";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
+import Loader from "@/components/Loader";
 
 export default function StoreListPage() {
   const router = useRouter();
@@ -39,11 +40,32 @@ export default function StoreListPage() {
       lastPage.data?.length > 0 ? lastPage.page + 1 : undefined,
   });
 
-  useEffect(() => {
-    if (isPageEnd) {
-      fetchNextPage();
+  /*
+  useCallback 훅은 React에서 성능 최적화를 위해 사용되는 훅 중 하나입니다. 주로 콜백 함수를 메모이제이션하고, 
+  컴포넌트가 다시 렌더링될 때마다 새로운 콜백 함수를 생성하는 것을 방지하기 위해 사용됩니다.
+  일반적으로 React에서 함수를 props로 전달하면, 해당 함수는 부모 컴포넌트가 리렌더링될 때마다 새로운 함수로 간주됩니다. 
+  이는 React의 재조정(reconciliation) 과정에서 성능 문제를 발생시킬 수 있습니다. 
+  만약 자식 컴포넌트가 불필요하게 리렌더링되는 경우, 이를 방지하기 위해 useCallback 훅을 사용할 수 있습니다.
+
+  useEffect + useCallback 쓰는 이유: https://5kdk.tistory.com/39
+  */
+
+  const fetchNext = useCallback(async () => {
+    const res = await fetchNextPage();
+    if (res.isError) {
+      console.log(res.error);
     }
-  }, [fetchNextPage, isPageEnd]);
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | undefined;
+
+    if (isPageEnd && hasNextPage) {
+      timerId = setTimeout(() => {
+        fetchNext();
+      }, 500);
+    }
+  }, [fetchNext, hasNextPage, isPageEnd]);
 
   if (isError) {
     return (
@@ -98,10 +120,8 @@ export default function StoreListPage() {
           ))
         )}
       </ul>
-      <button type="button" onClick={() => fetchNextPage()}>
-        Next Page
-      </button>
-      <div className="w-full touch-none h-10 mb-10 bg-red-600" ref={ref} />
+      {isFetching || hasNextPage || isFetchingNextPage ? <Loader /> : null}
+      <div className="w-full touch-none h-10 mb-10" ref={ref} />
     </div>
   );
 }
