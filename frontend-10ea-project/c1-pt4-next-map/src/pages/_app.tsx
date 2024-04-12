@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { SessionProvider } from "next-auth/react";
 
 /*
 • React Query: 리액트에서 복잡한 데이터 상태 및 비동기 작업 관리 간편하게 처리할 수 있는 라이브러리
@@ -13,13 +14,18 @@ https://tanstack.com/query/v4/docs/framework/react/overview
 
 const queryClient = new QueryClient();
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-      <ReactQueryDevtools />
+      <SessionProvider session={session}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+        <ReactQueryDevtools />
+      </SessionProvider>
     </QueryClientProvider>
   );
 }
