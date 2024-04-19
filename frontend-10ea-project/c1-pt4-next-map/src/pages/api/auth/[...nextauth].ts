@@ -7,7 +7,6 @@ https://next-auth.js.org/v3/adapters/prisma
 */
 
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import Google from "next-auth/providers/google";
@@ -23,6 +22,9 @@ export const authOptions = {
     }),
   ],
   adapter: PrismaAdapter(prisma),
+  pages: {
+    signIn: "/users/login",
+  }
 };
 
 export default NextAuth(authOptions);
