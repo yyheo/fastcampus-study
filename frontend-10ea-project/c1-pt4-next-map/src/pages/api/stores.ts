@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<StoreApiResponse | StoreType[]>
+  res: NextApiResponse<StoreApiResponse | StoreType[] | StoreType>
 ) {
   const { page = "" }: { page?: string } = req.query;
   const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ export default async function handler(
     const stores = await prisma.store.findMany({
       orderBy: { id: "asc" },
       take: 10,
-      skip: skipPage,
+      skip: skipPage * 10,
     });
 
     res.status(200).json({
@@ -25,9 +25,12 @@ export default async function handler(
       totalPage: Math.ceil(count / 10),
     });
   } else {
+    const { id }: { id?: string } = req.query;
+
     const stores = await prisma.store.findMany({
       orderBy: { id: "asc" },
+      where: { id: id ? parseInt(id) : {} },
     });
-    return res.status(200).json(stores);
+    return res.status(200).json(id ? stores[0] : stores);
   }
 }
