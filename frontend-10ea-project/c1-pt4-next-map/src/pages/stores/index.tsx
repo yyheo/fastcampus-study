@@ -9,6 +9,7 @@ import Link from "next/link";
 import Pagination from "@/components/Pagination";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import Loader from "@/components/Loader";
+import SearchFilter from "@/components/SearchFilter";
 
 export default function StoreListPage() {
   const router = useRouter();
@@ -77,6 +78,8 @@ export default function StoreListPage() {
 
   return (
     <div className="px-4 md:max-w-5xl mx-auto py-8">
+      {/* Search Filter */}
+      <SearchFilter />
       <ul role="list" className="divide-y divide-gray-100">
         {isLoading ? (
           <Loading />
