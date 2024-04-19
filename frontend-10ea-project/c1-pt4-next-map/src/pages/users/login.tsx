@@ -14,7 +14,7 @@ export default function LoginPage() {
       router.replace("/");
     }
   }, [router, status]);
-  
+
   return (
     <div className="flex flex-col justify-center px-6 lg:px-8 h-[60vh]">
       <div className="mx-auto w-full max-w-sm">
@@ -33,7 +33,7 @@ export default function LoginPage() {
           <button
             type="button"
             className="text-white flex gap-4 bg-[#4285F4] hover:bg-[#4285F4]/90 font-medium rounded-lg w-full px-5 py-4 text-center items-center justify-center"
-            onClick={() => signIn("google")}
+            onClick={() => signIn("google", { callbackUrl: "/" })}
           >
             <AiOutlineGoogle className="w-6 h-6" />
             Sign in with Google
