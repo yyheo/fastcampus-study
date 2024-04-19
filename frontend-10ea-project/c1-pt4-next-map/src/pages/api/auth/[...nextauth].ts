@@ -10,10 +10,21 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import Google from "next-auth/providers/google";
+import { randomBytes, randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
 export const authOptions = {
+  // session : https://next-auth.js.org/configuration/options 참고
+  session: {
+    strategy: "jwt" as const,
+    maxAge: 24 * 60 * 60, // 24 hours
+    updateAge: 2 * 60 * 60, // 2 hours
+    generateSessionToken: () => {
+      return randomUUID?.() ?? randomBytes(32).toString("hex");
+    },
+  },
+
   // Configure one or more authentication providers
   providers: [
     Google({
@@ -24,7 +35,7 @@ export const authOptions = {
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/users/login",
-  }
+  },
 };
 
 export default NextAuth(authOptions);
