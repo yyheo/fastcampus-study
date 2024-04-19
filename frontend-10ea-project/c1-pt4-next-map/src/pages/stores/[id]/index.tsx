@@ -111,8 +111,8 @@ export default function StorePage() {
       </div>
       {isSuccess && (
         <div className="overflow-hidden w-full mb-20 max-w-5xl max-h-[600px] mx-auto">
-          <Map setMap={setMap} lat={store?.lat} lng={store?.lng} zoom={1} />
-          <Marker map={map} store={store} />
+          <Map lat={store?.lat} lng={store?.lng} zoom={1} />
+          <Marker store={store} />
         </div>
       )}
     </>

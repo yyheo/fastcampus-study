@@ -22,13 +22,11 @@ export default function Home({ stores }: { stores: StoreType[] }) {
   const storeDatas = stores;
   return (
     <>
-      <Map setMap={setMap} />
+      <Map />
       <Markers
         stores={storeDatas}
-        map={map}
-        setCurrentStore={setCurrentStore}
       />
-      <StoreBox store={currentStore} setStore={setCurrentStore} />
+      <StoreBox />
     </>
   );
 }
