@@ -28,12 +28,16 @@ declare global {
 
 const DEFAULT_LAT = 37.497625203; // 강남역 위도 경도
 const DEFAULT_LNG = 127.03088379;
+const DEFAULT_ZOOM = 3;
 
 interface MapProps {
   setMap: Dispatch<SetStateAction<any>>;
+  lat?: string | null;
+  lng?: string | null;
+  zoom?: number | null;
 }
 
-export default function Map({ setMap }: MapProps) {
+export default function Map({ setMap, lat, lng, zoom }: MapProps) {
   const loadKakaoMap = () => {
     // kakao map 로드 - v3 스크립트를 동적으로 로드
     // 스크립트의 로딩이 끝나기 전에 v3의 객체에 접근하려고 하면 에러가 발생하기 때문에
@@ -43,8 +47,8 @@ export default function Map({ setMap }: MapProps) {
     window.kakao.maps.load(function () {
       const mapContainer = document.getElementById("map");
       const mapOption = {
-        center: new window.kakao.maps.LatLng(DEFAULT_LAT, DEFAULT_LNG), // 위도 경도 설정
-        level: 3, // zoom level
+        center: new window.kakao.maps.LatLng(lat ?? DEFAULT_LAT, lng ?? DEFAULT_LNG), // 위도 경도 설정
+        level: zoom ?? DEFAULT_ZOOM, // zoom level
       };
       // v3가 모두 로드된 후, 이 콜백 함수가 실행됩니다.
       const map = new window.kakao.maps.Map(mapContainer, mapOption);
