@@ -1,4 +1,4 @@
-import { LocationType, StoreType } from "@/interface";
+import { LocationType, StoreType, SearchType } from "@/interface";
 import { atom } from "recoil";
 
 const DEFAULT_LAT = "37.497625203"; // 강남역 위도 경도
@@ -24,3 +24,8 @@ export const locationState = atom<LocationType>({
     zoom: DEFAULT_ZOOM,
   },
 });
+
+export const searchState = atom<SearchType | null>({
+  key: "search",
+  default: null,
+})
