@@ -15,32 +15,42 @@ export default async function handler(
 ) {
   const { page = "", limit = "", q, district }: ResponseType = req.query;
 
-  if (page) {
-    const count = await prisma.store.count();
-    const skipPage = parseInt(page) - 1;
-    const stores = await prisma.store.findMany({
-      orderBy: { id: "asc" },
-      where: {
-        name: q ? { contains: q } : {}, // 참고: https://prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting
-        address: district? { contains: district } : {},
-      },
-      take: 10,
-      skip: skipPage * 10,
+  if (req.method === "POST") {
+    // 데이터 생성 처리
+    const data = req.body;
+    const result = await prisma.store.create({
+      data: { ...data },
     });
-
-    res.status(200).json({
-      page: parseInt(page),
-      data: stores,
-      totalCount: count,
-      totalPage: Math.ceil(count / 10),
-    });
+    return res.status(200).json(result);
   } else {
-    const { id }: { id?: string } = req.query;
+    // GET 요청 처리
+    if (page) {
+      const count = await prisma.store.count();
+      const skipPage = parseInt(page) - 1;
+      const stores = await prisma.store.findMany({
+        orderBy: { id: "asc" },
+        where: {
+          name: q ? { contains: q } : {}, // 참고: https://prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting
+          address: district ? { contains: district } : {},
+        },
+        take: 10,
+        skip: skipPage * 10,
+      });
 
-    const stores = await prisma.store.findMany({
-      orderBy: { id: "asc" },
-      where: { id: id ? parseInt(id) : {} },
-    });
-    return res.status(200).json(id ? stores[0] : stores);
+      res.status(200).json({
+        page: parseInt(page),
+        data: stores,
+        totalCount: count,
+        totalPage: Math.ceil(count / 10),
+      });
+    } else {
+      const { id }: { id?: string } = req.query;
+
+      const stores = await prisma.store.findMany({
+        orderBy: { id: "asc" },
+        where: { id: id ? parseInt(id) : {} },
+      });
+      return res.status(200).json(id ? stores[0] : stores);
+    }
   }
 }
