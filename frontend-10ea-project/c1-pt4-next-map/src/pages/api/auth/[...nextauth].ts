@@ -8,11 +8,9 @@ https://next-auth.js.org/v3/adapters/prisma
 
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/db";
 import Google from "next-auth/providers/google";
 import { randomBytes, randomUUID } from "crypto";
-
-const prisma = new PrismaClient();
 
 export const authOptions = {
   // session : https://next-auth.js.org/configuration/options 참고
