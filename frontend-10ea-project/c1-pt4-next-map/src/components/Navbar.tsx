@@ -24,7 +24,9 @@ export default function Navbar() {
             찜한 가게
           </Link>
           {status === "authenticated" ? (
-            <button type="button" onClick={() => signOut()}>로그아웃</button>
+            <button type="button" onClick={() => signOut()}>
+              로그아웃
+            </button>
           ) : (
             <Link href="/api/auth/signin" className="navbar__list--item">
               로그인

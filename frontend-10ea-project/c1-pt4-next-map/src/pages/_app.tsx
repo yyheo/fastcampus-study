@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil"; // yarn add recoil
-import { ToastContainer, toast } from 'react-toastify'; // https://www.npmjs.com/package/react-toastify
-import 'react-toastify/dist/ReactToastify.css'; 
+import { ToastContainer, toast } from "react-toastify"; // https://www.npmjs.com/package/react-toastify
+import "react-toastify/dist/ReactToastify.css";
 
 /*
 • React Query: 리액트에서 복잡한 데이터 상태 및 비동기 작업 관리 간편하게 처리할 수 있는 라이브러리
